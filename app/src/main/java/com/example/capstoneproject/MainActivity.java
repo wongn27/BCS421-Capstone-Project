@@ -15,8 +15,13 @@ public class MainActivity extends AppCompatActivity {
     //Erick H
     //hiiiiiiii
     // Natalie
+
     public void erickMethod(){
         //test
         //test
+
+    public void natalieMethod(){
+        // testing
+
     }
 }
