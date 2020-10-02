@@ -19,9 +19,11 @@ public class MainActivity extends AppCompatActivity {
     public void erickMethod(){
         //test
         //test
+    }
 
     public void natalieMethod(){
         // testing
 
     }
 }
+
