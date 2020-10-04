@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Capstone Project</string>
+    <string name="app_name">Pet Nanny</string>
+    <string name="words_logo">Pet Nanny</string>
+    <string name="project_name">Pet Nanny</string>
 </resources>
