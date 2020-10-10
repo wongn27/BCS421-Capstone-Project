@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="40dp"
+        android:paddingBottom="60dp"
+        android:columnCount="1"
+        android:useDefaultMargins="true"
+        tools:context=".Registration">
+
+        <TextView
+            android:layout_columnSpan="1"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/please_register"
+            android:textSize="26sp" />
+
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_gravity="fill_horizontal"
+            android:hint="@string/first_name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_gravity="fill_horizontal"
+            android:hint="@string/last_name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_gravity="fill_horizontal"
+            android:hint="@string/e_mail"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_gravity="fill_horizontal"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/register" />
+    </GridLayout>
+</ScrollView>
