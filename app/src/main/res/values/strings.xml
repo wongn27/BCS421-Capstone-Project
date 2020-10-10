@@ -2,4 +2,22 @@
     <string name="app_name">Pet Nanny</string>
     <string name="words_logo">Pet Nanny</string>
     <string name="project_name">Pet Nanny</string>
+    <string name="pet_nanny_logo">Pet Nanny Logo</string>
+
+    <!--Login Page-->
+    <string name="please_login">Please Login:</string>
+    <string name="loginBtn">Login</string>
+    <string name="create_account">Click here to create an account!</string>
+
+    <!--Registration Page-->
+    <string name="please_register">Please Register:</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="dob">DOB (mm-dd-yyyy)</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+
+    <!--Home Page-->
+    <string name="logout">Logout</string>
 </resources>

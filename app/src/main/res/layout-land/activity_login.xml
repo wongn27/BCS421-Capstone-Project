@@ -6,7 +6,7 @@
     android:useDefaultMargins="true"
     android:columnCount="1"
     android:layout_marginHorizontal="40dp"
-    android:layout_marginTop="125dp">
+    android:layout_marginTop="40dp">
 
     <TextView
         android:textSize="26sp"

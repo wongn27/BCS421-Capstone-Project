@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
         image.setAnimation(topAnim);
         text.setAnimation(bottomAnim);
 
-
+        
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
