@@ -29,4 +29,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         }));
     }
+
+    public void editProfile(View view){
+        Intent intToEditProfile = new Intent(HomeActivity.this, EditProfileActivity.class);
+        startActivity(intToEditProfile);
+    }
+
+    public void editPetProfile(View view){
+        Intent intToEditPetProfile = new Intent(HomeActivity.this, EditPetProfileActivity.class);
+        startActivity(intToEditPetProfile);
+    }
 }
