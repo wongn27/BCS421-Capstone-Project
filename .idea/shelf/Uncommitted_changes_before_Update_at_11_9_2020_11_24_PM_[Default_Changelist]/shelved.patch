@@ -1,0 +1,152 @@
+Index: app/src/main/java/com/example/capstoneproject/EditPetProfileActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.capstoneproject;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\n\r\npublic class EditPetProfileActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_edit_pet_profile);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/capstoneproject/EditPetProfileActivity.java	(revision c419f6e61d7ecb73854a0b63790fcfdd8966dc38)
++++ app/src/main/java/com/example/capstoneproject/EditPetProfileActivity.java	(date 1604980282377)
+@@ -1,14 +1,45 @@
+ package com.example.capstoneproject;
+ 
++import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.os.Bundle;
++import android.view.View;
++import android.widget.TextView;
++
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.DocumentReference;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.EventListener;
++import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.FirebaseFirestoreException;
+ 
+ public class EditPetProfileActivity extends AppCompatActivity {
+ 
++    TextView petName;
++    FirebaseAuth firebaseAuth;
++    FirebaseFirestore firestore;
++    String userId;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_edit_pet_profile);
++        petName = findViewById(R.id.textViewPetName);
++
++        firebaseAuth = FirebaseAuth.getInstance();
++        firestore = FirebaseFirestore.getInstance();
++
++        userId = firebaseAuth.getCurrentUser().getUid();
++
++        DocumentReference documentReference = firestore.collection("pets").document(userId);
++        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
++            @Override
++            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                petName.setText(value.getString("name"));
++            }
++        });
++
++
+     }
+ }
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\napply plugin: 'com.google.gms.google-services'\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.2\"\r\n\r\n    defaultConfig {\r\n        multiDexEnabled true\r\n        applicationId \"com.example.capstoneproject\"\r\n        minSdkVersion 19\r\n        targetSdkVersion 30\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: \"libs\", include: [\"*.jar\"])\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'\r\n    implementation 'com.google.firebase:firebase-firestore:21.7.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.2'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'\r\n    implementation platform('com.google.firebase:firebase-bom:25.12.0')\r\n    implementation 'com.google.firebase:firebase-analytics:17.5.0'\r\n    implementation 'com.google.firebase:firebase-auth:19.4.0'\r\n    implementation 'com.android.support:multidex:1.0.3'\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision c419f6e61d7ecb73854a0b63790fcfdd8966dc38)
++++ app/build.gradle	(date 1604980321236)
+@@ -37,5 +37,7 @@
+     implementation 'com.google.firebase:firebase-auth:19.4.0'
+     implementation 'com.android.support:multidex:1.0.3'
+ 
++    // library for pet profile picture
++    implementation 'de.hdodenhof:circleimageview:3.1.0'
+ 
+ }
+Index: app/src/main/res/layout/activity_edit_pet_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".EditPetProfileActivity\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_edit_pet_profile.xml	(revision c419f6e61d7ecb73854a0b63790fcfdd8966dc38)
++++ app/src/main/res/layout/activity_edit_pet_profile.xml	(date 1604980296984)
+@@ -1,9 +1,32 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context=".EditPetProfileActivity">
+ 
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++    <de.hdodenhof.circleimageview.CircleImageView
++        android:id="@+id/petProfilePicture"
++        android:layout_width="96dp"
++        android:layout_height="96dp"
++        android:src="@drawable/pet_profile_picture"
++        app:civ_border_color="#FF000000"
++        app:civ_border_width="2dp" />
++
++    <TextView
++        android:id="@+id/textViewPetName"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:text="@string/pet_name"
++        android:textSize="24sp"/>
++
++
++    
++
++
++
++
++
++</LinearLayout>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_7\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision c419f6e61d7ecb73854a0b63790fcfdd8966dc38)
++++ .idea/misc.xml	(date 1604967766464)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Pet Nanny</string>\r\n    <string name=\"words_logo\">Pet Nanny</string>\r\n    <string name=\"project_name\">Pet Nanny</string>\r\n    <string name=\"pet_nanny_logo\">Pet Nanny Logo</string>\r\n\r\n    <!--Login Page-->\r\n    <string name=\"please_login\">Please Login:</string>\r\n    <string name=\"loginBtn\">Login</string>\r\n    <string name=\"create_account\">Click here to create an account!</string>\r\n\r\n    <!--Registration Page-->\r\n    <string name=\"please_register\">Please Register:</string>\r\n    <string name=\"first_name\">First Name</string>\r\n    <string name=\"last_name\">Last Name</string>\r\n    <string name=\"dob\">DOB (mm-dd-yyyy)</string>\r\n    <string name=\"e_mail\">E-mail</string>\r\n    <string name=\"password\">Password</string>\r\n    <string name=\"register\">Register</string>\r\n\r\n    <!--Home Page-->\r\n    <string name=\"logout\">Logout</string>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision c419f6e61d7ecb73854a0b63790fcfdd8966dc38)
++++ app/src/main/res/values/strings.xml	(date 1604975996039)
+@@ -20,4 +20,5 @@
+ 
+     <!--Home Page-->
+     <string name="logout">Logout</string>
++    <string name="pet_name">Pet Name</string>
+ </resources>
+\ No newline at end of file
