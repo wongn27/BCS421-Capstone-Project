@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "62402868762",
+    "firebase_url": "https://pet-nanny-417eb.firebaseio.com",
+    "project_id": "pet-nanny-417eb",
+    "storage_bucket": "pet-nanny-417eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62402868762:android:eb52f52339bdd3684c03a3",
+        "android_client_info": {
+          "package_name": "com.example.capstoneproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62402868762-046ncd0imd9b8ois2vmd500vi3i05q2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHR5iM0S4S97cPA87k7V48LbtUx1nCeL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62402868762-046ncd0imd9b8ois2vmd500vi3i05q2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
