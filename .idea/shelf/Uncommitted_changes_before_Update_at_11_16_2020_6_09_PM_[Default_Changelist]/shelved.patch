@@ -1,0 +1,72 @@
+Index: app/src/main/java/com/example/capstoneproject/EditPetProfileActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.capstoneproject;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\n\r\npublic class EditPetProfileActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_edit_pet_profile);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/capstoneproject/EditPetProfileActivity.java	(revision 137c918d26a798602b865fd64caea61b8c3ca090)
++++ app/src/main/java/com/example/capstoneproject/EditPetProfileActivity.java	(date 1604985528407)
+@@ -1,14 +1,43 @@
+ package com.example.capstoneproject;
+ 
++import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.os.Bundle;
++import android.view.View;
++import android.widget.TextView;
++
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.DocumentReference;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.EventListener;
++import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.FirebaseFirestoreException;
+ 
+ public class EditPetProfileActivity extends AppCompatActivity {
+ 
++    TextView petName;
++    FirebaseAuth firebaseAuth;
++    FirebaseFirestore firestore;
++    String userId;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_edit_pet_profile);
++        petName = findViewById(R.id.textViewPetName);
++
++        firebaseAuth = FirebaseAuth.getInstance();
++        firestore = FirebaseFirestore.getInstance();
++
++        userId = firebaseAuth.getCurrentUser().getUid();
++
++        DocumentReference documentReference = firestore.collection("pets").document(userId);
++        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
++            @Override
++            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                petName.setText(value.getString("name"));
++            }
++        });
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Pet Nanny</string>\r\n    <string name=\"words_logo\">Pet Nanny</string>\r\n    <string name=\"project_name\">Pet Nanny</string>\r\n    <string name=\"pet_nanny_logo\">Pet Nanny Logo</string>\r\n\r\n    <!--Login Page-->\r\n    <string name=\"please_login\">Please Login:</string>\r\n    <string name=\"loginBtn\">Login</string>\r\n    <string name=\"create_account\">Click here to create an account!</string>\r\n\r\n    <!--Registration Page-->\r\n    <string name=\"please_register\">Please Register:</string>\r\n    <string name=\"first_name\">First Name</string>\r\n    <string name=\"last_name\">Last Name</string>\r\n    <string name=\"dob\">DOB (mm-dd-yyyy)</string>\r\n    <string name=\"e_mail\">E-mail</string>\r\n    <string name=\"password\">Password</string>\r\n    <string name=\"register\">Register</string>\r\n\r\n    <!--Home Page-->\r\n    <string name=\"logout\">Logout</string>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 137c918d26a798602b865fd64caea61b8c3ca090)
++++ app/src/main/res/values/strings.xml	(date 1604985183701)
+@@ -20,4 +20,5 @@
+ 
+     <!--Home Page-->
+     <string name="logout">Logout</string>
++    <string name="pet_name">Pet Name</string>
+ </resources>
+\ No newline at end of file
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_11_9_2020_10_28_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_11_9_2020_10_28_PM__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_11_9_2020_11_24_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_11_9_2020_11_24_PM__Default_Changelist_.xml
