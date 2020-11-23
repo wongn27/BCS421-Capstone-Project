@@ -40,7 +40,7 @@ dependencies {
     // Pet profile picture
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    // Floating action button
+    // Design support library for AddPetProfileActivity and floating action button
     implementation 'com.google.android.material:material:1.1.0-beta01'
 
 }

@@ -21,9 +21,11 @@
     <!--Home Page-->
     <string name="logout">Logout</string>
     <string name="pet_name">Pet Name</string>
-    <string name="gender">Gender</string>
+    <string name="name">Name</string>
     <string name="type">Type</string>
     <string name="age">Age</string>
     <string name="weight">Weight</string>
     <string name="special_care_needs">Special Care Needs</string>
+    <string name="add_pet">Add Pet</string>
+    <string name="sex">Sex</string>
 </resources>

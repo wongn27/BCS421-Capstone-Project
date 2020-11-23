@@ -2,6 +2,7 @@ package com.example.capstoneproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -20,8 +21,9 @@ public class EditPetProfileActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Open another activity to add a pet
-
+                // Open the activity to add a pet
+                Intent intent = new Intent(EditPetProfileActivity.this, AddPetProfileActivity.class);
+                startActivity(intent);
             }
         });
 

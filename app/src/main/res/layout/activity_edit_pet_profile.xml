@@ -30,14 +30,14 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/textViewGender"
+                android:id="@+id/textViewSex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_toRightOf="@id/petProfilePicture"
                 android:layout_below="@id/textViewPetName"
                 android:layout_weight="1"
-                android:text="@string/gender"
+                android:text="@string/sex"
                 android:textSize="24sp" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_toRightOf="@id/petProfilePicture"
-                android:layout_below="@id/textViewGender"
+                android:layout_below="@id/textViewSex"
                 android:layout_weight="1"
                 android:text="@string/type"
                 android:textSize="24sp" />
