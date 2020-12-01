@@ -258,6 +258,9 @@ public class EditProfileActivity extends AppCompatActivity {
         return a.matches(regex);
     }
 
+    public void hiii() {
+
+    }
 
 }
 
