@@ -17,12 +17,21 @@
         android:text="Edit Profile"
         android:textSize="30dp" />
 
+    <ImageView
+        android:id="@+id/profilePicImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextView
         android:id="@+id/firstNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_weight="0"
         android:text="First name" />
