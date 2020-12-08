@@ -36,5 +36,6 @@
 
     <string name="add_pet">Add Pet</string>
     <string name="sex">Sex</string>
+    <string name="requests">Requests</string>
 
 </resources>

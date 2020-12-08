@@ -11,6 +11,11 @@
             android:id="@+id/nav_editPetProfile"
             android:icon="@drawable/ic_paw"
             android:title="@string/pet_profiles" />
+
+        <item
+            android:id="@+id/nav_request"
+            android:icon="@drawable/ic_baseline_message_24"
+            android:title="@string/requests" />
     </group>
 
     <item

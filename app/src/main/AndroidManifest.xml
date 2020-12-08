@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".AddPetProfileActivity"></activity>
+        <activity android:name=".ViewPetSitterActivity"></activity>
+        <activity android:name=".AddPetProfileActivity" />
         <activity android:name=".EditPetProfileActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".RegistrationActivity" />
