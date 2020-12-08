@@ -37,5 +37,7 @@
     <string name="add_pet">Add Pet</string>
     <string name="sex">Sex</string>
     <string name="requests">Requests</string>
+    <string name="request">Request</string>
+    <string name="asking_daily_price">Asking Daily Price</string>
 
 </resources>
