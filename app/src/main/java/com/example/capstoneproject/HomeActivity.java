@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection("users");
 
-    Button requestBtn;
+    Button requestBtn, reviewBtn;
 
     private PetSitterAdapter adapter;
 
@@ -63,6 +63,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_home);
 
         requestBtn = findViewById(R.id.requestBtn);
+        reviewBtn = findViewById(R.id.reviewBtn);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
