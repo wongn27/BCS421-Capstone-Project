@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:cardBackgroundColor="#FFFFE8">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp" >
+
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/petProfilePicture"-->
+<!--            android:layout_width="96dp"-->
+<!--            android:layout_height="96dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:src="@drawable/pet_profile_picture"-->
+<!--            app:civ_border_color="#FF000000"-->
+<!--            app:civ_border_width="2dp" />-->
+
+        <TextView
+            android:id="@+id/textViewPetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:text="@string/pet_name"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/textViewPetName"
+            android:layout_weight="1"
+            android:text="@string/sex"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/textViewSex"
+            android:layout_weight="1"
+            android:text="@string/type"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/textViewType"
+            android:layout_weight="1"
+            android:text="@string/age"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/textViewAge"
+            android:layout_weight="1"
+            android:text="@string/weight"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewSpecialCareNeeds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/textViewWeight"
+            android:layout_weight="1"
+            android:text="@string/special_care_needs"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
