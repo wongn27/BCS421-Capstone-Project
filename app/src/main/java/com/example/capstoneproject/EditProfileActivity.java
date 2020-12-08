@@ -43,7 +43,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText firstNameET;
     private EditText lastNameET;
     private EditText emailET;
-    private EditText addressET;
+    private EditText addressET, phoneET;
     private ImageView profilePic;
     private Uri imageUri;
     private FirebaseFirestore fStore;
@@ -67,6 +67,7 @@ public class EditProfileActivity extends AppCompatActivity {
         emailET = findViewById(R.id.emailEditText);
         addressET = findViewById(R.id.addressEditText);
         profilePic = findViewById(R.id.profilePicImageView);
+        phoneET = findViewById(R.id.phoneEditText);
 
 
         //prepare firestore instance
@@ -88,6 +89,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             lastNameET.setText(documentSnapshot.getString("lName"));
                             emailET.setText(documentSnapshot.getString("email"));
                             addressET.setText(documentSnapshot.getString("address"));
+                            phoneET.setText(documentSnapshot.getString("phone"));
                             if (storage.getInstance().getReference().child("profilepics/" + userID) != null) {
                                 imageReference = storage.getInstance().getReference().child("profilepics/" + userID);
                             }
@@ -217,7 +219,7 @@ public class EditProfileActivity extends AppCompatActivity {
         userRef = fStore.collection("users").document(userID);
 
         //check to make sure values are valid
-        if (isValidEmail(email) && isValidName(firstName) && isValidName(lastName)) {
+        if (isValidEmail(email)) {
             userRef.set(user)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -258,9 +260,6 @@ public class EditProfileActivity extends AppCompatActivity {
         return a.matches(regex);
     }
 
-    public void hiii() {
-
-    }
 
 }
 

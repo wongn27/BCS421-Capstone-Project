@@ -101,7 +101,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Will return to this activity after Registration is completed
-                startActivityForResult(new Intent(LoginActivity.this, RegistrationActivity.class), REQUEST_EMAIL);
+                //startActivityForResult(new Intent(LoginActivity.this, RegistrationActivity.class), REQUEST_EMAIL);
+                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+                startActivity(intent);
             }
         });
 

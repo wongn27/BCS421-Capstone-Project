@@ -107,6 +107,26 @@
         android:inputType="textPostalAddress"
         android:text="" />
 
+    <TextView
+        android:id="@+id/phoneTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="0"
+        android:text="Phone" />
+
+    <EditText
+        android:id="@+id/phoneEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="0"
+        android:ems="10"
+        android:inputType="number|phone"
+        android:text="" />
+
     <Button
         android:id="@+id/updateButton"
         android:layout_width="wrap_content"
