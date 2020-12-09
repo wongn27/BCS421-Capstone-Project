@@ -22,11 +22,13 @@ public class ViewPetSitterActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference docRef;
+    public static final String EXTRA_PETSITTERID2 = "EXTRA_PETSITTERID2";
 
     ImageView messageIcon, profilePic;
     TextView fullName, myBio, askingPrice;
     RatingBar ratingBar;
     Button requestBtn;
+    String petSitterUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class ViewPetSitterActivity extends AppCompatActivity {
         requestBtn = findViewById(R.id.requestBtn);
 
         Intent intent = getIntent();
-        String petSitterUserId = intent.getStringExtra(HomeActivity.EXTRA_PETSITTERID);
+        petSitterUserId = intent.getStringExtra(HomeActivity.EXTRA_PETSITTERID);
 
         docRef = db.collection("users").document(petSitterUserId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -59,6 +61,7 @@ public class ViewPetSitterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewPetSitterActivity.this, RequestActivity.class);
+                intent.putExtra(EXTRA_PETSITTERID2, petSitterUserId);
                 startActivity(intent);
             }
         });
