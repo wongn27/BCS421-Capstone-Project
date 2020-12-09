@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class EditPetProfileActivity extends AppCompatActivity {
 //    private TextView textViewWeight;
 //    private TextView textViewSpecialCareNeeds;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
 //  private CollectionReference userPetsRef = db.collection("pets");
     private CollectionReference userPetsRef;
 
@@ -47,7 +48,7 @@ public class EditPetProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_pet_profile);
 
-        setUpRecyclerView();
+
 
 //        textViewName = findViewById(R.id.textViewPetName);
 //        textViewSex = findViewById(R.id.textViewSex);
@@ -86,12 +87,15 @@ public class EditPetProfileActivity extends AppCompatActivity {
 //                });
 //
 
-
+        db = FirebaseFirestore.getInstance();
 
         firebaseAuth = FirebaseAuth.getInstance();
         userID = firebaseAuth.getCurrentUser().getUid();
+        Log.v("Error1", userID);
 
-        userPetsRef = db.collection("users").document(userID).collection("pets");
+        if (db != null)
+        //userPetsRef = db.collection("users").document(userID).collection("pets");
+            userPetsRef = db.collection("users").document(firebaseAuth.getCurrentUser().getUid()).collection("pets");
 
         FloatingActionButton floatingActionButton = findViewById(R.id.button_floatingActionButton);
 
@@ -103,17 +107,20 @@ public class EditPetProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        setUpRecyclerView();
     }
 
     private void setUpRecyclerView() {
-        Query query = userPetsRef.orderBy("name", Query.Direction.DESCENDING);
+        //if (userPetsRef != null) {
+            Query query = userPetsRef.orderBy("name");//.orderBy("name", Query.Direction.ASCENDING);
 
-        FirestoreRecyclerOptions<Pet> options = new FirestoreRecyclerOptions.Builder<Pet>()
-                .setQuery(query, Pet.class)
-                .build();
+            FirestoreRecyclerOptions<Pet> options = new FirestoreRecyclerOptions.Builder<Pet>()
+                    .setQuery(query, Pet.class)
+                    .build();
 
-        adapter = new PetAdapter(options);
-
+            adapter = new PetAdapter(options);
+        //}
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
