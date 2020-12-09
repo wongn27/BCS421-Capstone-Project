@@ -18,8 +18,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
@@ -57,7 +57,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Creates the content view and toolbar, sets up the drawer layout and the
      * action bar toggle, and sets up the navigation view.
-     * @param savedInstanceState    Saved instance.
+     *
+     * @param savedInstanceState Saved instance.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,11 +94,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, RequestActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         reviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (HomeActivity.this, GiveFeedbackActivity.class);
+                Intent intent = new Intent(HomeActivity.this, GiveFeedbackActivity.class);
 
                 startActivity(intent);
             }
@@ -105,8 +110,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-    private void setUpRecyclerView(){
+    private void setUpRecyclerView() {
         Query query = usersRef.orderBy("email", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PetSitter> options = new FirestoreRecyclerOptions.Builder<PetSitter>()
@@ -191,8 +195,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Inflates the options menu.
-     * @param menu  Menu to inflate
-     * @return      Returns true if menu is inflated.
+     *
+     * @param menu Menu to inflate
+     * @return Returns true if menu is inflated.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -203,8 +208,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Handles a click on the Settings item in the options menu.
-     * @param item  Item in options menu that was clicked.
-     * @return      Returns true if the item was Settings.
+     *
+     * @param item Item in options menu that was clicked.
+     * @return Returns true if the item was Settings.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -224,8 +230,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Handles a navigation drawer item click. It detects which item was
      * clicked and displays a toast message showing which item.
-     * @param item  Item in the navigation drawer
-     * @return      Returns true after closing the nav drawer
+     *
+     * @param item Item in the navigation drawer
+     * @return Returns true after closing the nav drawer
      */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -258,7 +265,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Displays a toast message.
-     * @param message   Message to display in toast
+     *
+     * @param message Message to display in toast
      */
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
