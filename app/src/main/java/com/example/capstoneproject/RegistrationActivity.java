@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +31,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,6 +53,10 @@ public class RegistrationActivity extends AppCompatActivity {
     //Firestore user id
     String userID;
 
+    private Geocoder geocoder;
+    double longX = 0;
+    double latX = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +69,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        geocoder = new Geocoder(this);
+
 
 
         imageUri = null;
@@ -164,7 +174,20 @@ public class RegistrationActivity extends AppCompatActivity {
                     flags++;
                 }
 
+
                 if (flags == 0){
+                    //turn given address into lat/ long
+                    try {
+                        List<Address> addresses = geocoder.getFromLocationName(addressX, 1);
+                        Address address = addresses.get(0);
+                        longX = address.getLongitude();
+                        latX = address.getLatitude();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
                     //Register user in Firebase
                     mFirebaseAuth.createUserWithEmailAndPassword(emailX, pwdX).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -184,6 +207,13 @@ public class RegistrationActivity extends AppCompatActivity {
                                 user.put("email", emailX);
                                 user.put("address", addressX);
                                 user.put("phone", phoneX);
+                                user.put("bio", "");
+                                user.put("askingPrice", -1);
+                                user.put("isSitter", false);
+                                user.put("longitude", longX);
+                                user.put("latitude", latX);
+
+
 
                                 final ProgressDialog pd = new ProgressDialog(RegistrationActivity.this);
                                 pd.setTitle("Uploading image...");
@@ -223,8 +253,9 @@ public class RegistrationActivity extends AppCompatActivity {
                                     }
                                 });
                                 // Return to Login after Successfully being registered
-                                Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
-                                startActivity(intent);
+                                /*Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
+                                startActivity(intent);*/
+                                finish();
                             }
                         }
                     });

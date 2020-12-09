@@ -231,6 +231,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                 return true;
+            case R.id.nav_feedback:
+                drawer.closeDrawer(GravityCompat.START);
+                FirebaseAuth.getInstance().signOut();
+                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
+                return true;
             default:
                 return false;
         }
