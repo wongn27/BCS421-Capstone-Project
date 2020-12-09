@@ -52,6 +52,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private Geocoder geocoder;
 
+    public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
+
     /**
      * Creates the content view and toolbar, sets up the drawer layout and the
      * action bar toggle, and sets up the navigation view.
@@ -116,6 +118,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 String id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
+
+                Intent intent = new Intent(HomeActivity.this, ViewPetSitterActivity.class);
+                intent.putExtra(EXTRA_PETSITTERID, id);
+                startActivity(intent);
 
                 displayToast("Position: " + position + "\nDocID: " + id);
             }
@@ -232,6 +238,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                return true;
+            case R.id.nav_feedback:
+                drawer.closeDrawer(GravityCompat.START);
+                FirebaseAuth.getInstance().signOut();
+                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
                 return true;
             default:
                 return false;

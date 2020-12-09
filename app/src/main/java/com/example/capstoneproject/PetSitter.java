@@ -1,15 +1,16 @@
 package com.example.capstoneproject;
 
 public class PetSitter {
-    private String fName, lName, email;
+    private String fName, lName, email, imageUrl;
 
     public PetSitter() {
     }
 
-    public PetSitter(String fName, String lName, String email) {
+    public PetSitter(String fName, String lName, String email, String imageUrl) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
+        this.imageUrl = imageUrl;
     }
 
     public String getfName() {
@@ -34,5 +35,13 @@ public class PetSitter {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

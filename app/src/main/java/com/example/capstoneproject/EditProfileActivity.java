@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class    EditProfileActivity extends AppCompatActivity {
 
     //member variables
     private String userID;
@@ -92,6 +93,8 @@ public class EditProfileActivity extends AppCompatActivity {
                             phoneET.setText(documentSnapshot.getString("phone"));
                             if (storage.getInstance().getReference().child("profilepics/" + userID) != null) {
                                 imageReference = storage.getInstance().getReference().child("profilepics/" + userID);
+                                Toast.makeText(EditProfileActivity.this, imageReference.toString(), Toast.LENGTH_SHORT).show();
+                                Log.d("IMAGEREf", imageReference.toString());
                             }
 
                             try {
