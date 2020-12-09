@@ -37,5 +37,13 @@
     <string name="add_pet">Add Pet</string>
     <string name="sex">Sex</string>
     <string name="requests">Requests</string>
+    <string name="request">Request</string>
+    <string name="asking_daily_price">Asking Daily Price</string>
+    <string name="update">Update</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="review_sitter">Review Sitter</string>
+    <string name="feedback">Feedback</string>
 
 </resources>
