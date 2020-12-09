@@ -85,6 +85,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         geocoder = new Geocoder(this);
         setUpRecyclerView();
+
+        reviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (HomeActivity.this, GiveFeedbackActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
