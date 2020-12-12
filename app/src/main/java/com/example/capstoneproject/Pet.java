@@ -27,6 +27,30 @@ public class Pet {
         return sex;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public void setSpecialCareNeeds(String specialCareNeeds) {
+        this.specialCareNeeds = specialCareNeeds;
+    }
+
     public String getType() {
         return type;
     }
