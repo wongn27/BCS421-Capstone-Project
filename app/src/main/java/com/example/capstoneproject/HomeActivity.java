@@ -43,6 +43,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TESTLOG = "TESTLOG";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection("users");
 
@@ -54,16 +55,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
 
-    /**
-     * Creates the content view and toolbar, sets up the drawer layout and the
-     * action bar toggle, and sets up the navigation view.
-     *
-     * @param savedInstanceState Saved instance.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Log.d(TESTLOG, "testing log");
+        Toast.makeText(this, "testing log", Toast.LENGTH_SHORT).show();
 
         requestBtn = findViewById(R.id.requestBtn);
         reviewBtn = findViewById(R.id.reviewBtn);
@@ -159,7 +157,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             float distance = location1.distanceTo(location2);
 
-
+            Toast.makeText(this, distance * 0.000621371+"", Toast.LENGTH_SHORT).show();
             Log.d("CHECKGEO2", "Total distance: " + distance * 0.000621371);
         } catch (IOException e) {
             e.printStackTrace();
@@ -248,15 +246,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
                 startActivity(new Intent(HomeActivity.this, EditPetProfileActivity.class));
                 return true;
+            case R.id.nav_request:
+                drawer.closeDrawer(GravityCompat.START);
+                startActivity(new Intent(HomeActivity.this, ViewRequestsActivity.class));
+                return true;
+            case R.id.nav_feedback:
+                //drawer.closeDrawer(GravityCompat.START);
+                //FirebaseAuth.getInstance().signOut();
+                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
+                return true;
             case R.id.nav_logout:
                 drawer.closeDrawer(GravityCompat.START);
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                return true;
-            case R.id.nav_feedback:
-                drawer.closeDrawer(GravityCompat.START);
-                FirebaseAuth.getInstance().signOut();
-                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
+                finish();
                 return true;
             default:
                 return false;

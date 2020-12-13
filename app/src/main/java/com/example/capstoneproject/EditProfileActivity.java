@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class    EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity {
 
     //member variables
     private String userID;
