@@ -8,12 +8,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,11 +46,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
     //member variables
     private String userID;
+    private boolean sitter;
     private EditText firstNameET;
     private EditText lastNameET;
     private EditText emailET;
-    private EditText addressET, phoneET;
+    private EditText addressET, phoneET, bioET;
     private ImageView profilePic;
+    private Button updateButton;
+    private Switch sitterSwitch;
     private Uri imageUri;
     private FirebaseFirestore fStore;
     private FirebaseAuth fAuth;
@@ -53,6 +61,10 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private StorageReference imageReference;
+
+    private Geocoder geocoder;
+    double longX = 0;
+    double latX = 0;
 
 
 
@@ -69,6 +81,11 @@ public class EditProfileActivity extends AppCompatActivity {
         addressET = findViewById(R.id.addressEditText);
         profilePic = findViewById(R.id.profilePicImageView);
         phoneET = findViewById(R.id.phoneEditText);
+        bioET = findViewById(R.id.bioEditText);
+        updateButton = findViewById(R.id.updateButton);
+        sitterSwitch = findViewById(R.id.sitterSwitch);
+
+
 
 
         //prepare firestore instance
@@ -91,6 +108,11 @@ public class EditProfileActivity extends AppCompatActivity {
                             emailET.setText(documentSnapshot.getString("email"));
                             addressET.setText(documentSnapshot.getString("address"));
                             phoneET.setText(documentSnapshot.getString("phone"));
+                            bioET.setText(documentSnapshot.getString("bio"));
+                            sitter = documentSnapshot.getBoolean("isSitter");
+                            if (sitter) {
+                                sitterSwitch.setChecked(true);
+                            }
                             if (storage.getInstance().getReference().child("profilepics/" + userID) != null) {
                                 imageReference = storage.getInstance().getReference().child("profilepics/" + userID);
                                 Toast.makeText(EditProfileActivity.this, imageReference.toString(), Toast.LENGTH_SHORT).show();
@@ -131,6 +153,21 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 });
 
+
+
+        sitterSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sitterSwitch.isChecked()) {
+                    sitter = true;
+                }
+                else {
+                    sitter = false;
+                }
+            }
+        });
+
+
         //when you touch the picture select it
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +175,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 choosePicture();
             }
         });
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUser();
+            }
+        });
+
+
 
 
         //hiiiiiii
@@ -197,32 +243,52 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     //function to update the users profile
-    public void updateUser(View v) {
+    public void updateUser() {
 
 
         //field variables
-        String firstName;
-        String lastName;
-        String email;
-        String address;
-
+        String firstName, lastName, email, address, bio, phone;
         //get the current values
         firstName = firstNameET.getText().toString();
         lastName = lastNameET.getText().toString();
         email = emailET.getText().toString();
         address = addressET.getText().toString();
+        phone = phoneET.getText().toString();
+        bio = bioET.getText().toString();
 
+
+        geocoder = new Geocoder(this);
+
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(address, 1);
+            Address theAddress = addresses.get(0);
+            longX = theAddress.getLongitude();
+            latX = theAddress.getLatitude();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //put info in user object
         Map<String, Object> user = new HashMap<>();
 
         user.put("fName", firstName);
         user.put("lName", lastName);
         user.put("email", email);
         user.put("address", address);
+        user.put("phone", phone);
+        user.put("bio", bio);
+        user.put("isSitter", sitter);
+
+        user.put("longitude", longX);
+        user.put("latitude", latX);
+
 
         userRef = fStore.collection("users").document(userID);
 
-        //check to make sure values are valid
-        if (isValidEmail(email)) {
+        //check to make sure values are valid and set user object to user reference
+        if (isValidEmail(email) && isValidName(firstName) && isValidName(lastName)) {
             userRef.set(user)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -242,6 +308,8 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(EditProfileActivity.this, "Info validation error. Check all fields", Toast.LENGTH_SHORT).show();
         }
 
+
+
     }
 
     //check email
@@ -255,12 +323,6 @@ public class EditProfileActivity extends AppCompatActivity {
         String regexName = "\\p{Upper}(\\p{Lower}+\\s?)";
         String patternName = "(" + regexName + "){1,2}";
         return n.matches(patternName);
-    }
-
-    //check address
-    public boolean isValidAddress(String a) {
-        String regex = "[A-Za-z0-9'\\.\\-\\s\\,]";
-        return a.matches(regex);
     }
 
 

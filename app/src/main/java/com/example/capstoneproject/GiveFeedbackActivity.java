@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class GiveFeedbackActivity extends AppCompatActivity {
 
+    //variables
     private FirebaseFirestore fStore;
     private FirebaseAuth fAuth;
     private DocumentReference userRef;
@@ -40,9 +41,11 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give_feedback);
 
+        //set views
         ratingBar = findViewById(R.id.ratingBar);
         submitButton = findViewById(R.id.submitButton);
         reviewTextBox = findViewById(R.id.feedbackEditText);
+
         rating = 0;
 
         //prepare firestore instance
@@ -53,8 +56,9 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         sitterID = "hi";
 
         fStore  = FirebaseFirestore.getInstance();
-        reviewRef = fStore.collection("Reviews").document(sitterID + "." + userID );
+        reviewRef = fStore.collection("users").document(sitterID).collection("reviews").document(userID);
 
+        //submit the review when user clicks
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +67,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
 
                 review = reviewTextBox.getText().toString();
 
+                //fill up review reference
                 Map<String, Object> newReview = new HashMap<>();
 
                 newReview.put("review", review);
