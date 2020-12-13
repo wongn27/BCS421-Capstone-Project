@@ -32,7 +32,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     private StorageReference imageReference;
     private String userID, sitterID, review;
     private float rating;
-    private DocumentReference reviewRef;
+    private DocumentReference reviewRef, sitterRef;
     RatingBar ratingBar;
     Button submitButton;
     EditText reviewTextBox;
