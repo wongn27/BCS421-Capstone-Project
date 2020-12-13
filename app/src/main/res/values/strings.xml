@@ -45,5 +45,7 @@
     <string name="email">Email</string>
     <string name="review_sitter">Review Sitter</string>
     <string name="feedback">Feedback</string>
+    <string name="bio">Bio</string>
+    <string name="tell_us_about_your_experience">Tell us about your experience.</string>
 
 </resources>

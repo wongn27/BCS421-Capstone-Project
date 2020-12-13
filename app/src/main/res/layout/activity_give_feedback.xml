@@ -28,8 +28,8 @@
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Tell us about your experience."
-        android:inputType="text" />
+        android:hint="@string/tell_us_about_your_experience"
+        android:inputType="textMultiLine" />
 
     <RatingBar
         android:id="@+id/ratingBar"
