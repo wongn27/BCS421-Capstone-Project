@@ -138,6 +138,7 @@ public class AddPetProfileActivity extends AppCompatActivity {
                     });
 
             startActivity(intent);
+            finish();
 
         } else {
             Toast.makeText(this, "Invalid", Toast.LENGTH_LONG).show();
