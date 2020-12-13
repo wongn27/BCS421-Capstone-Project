@@ -45,6 +45,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private StorageReference imageReference;
+    String imageUrl;
 
     //Firebase db
     FirebaseAuth mFirebaseAuth;
@@ -57,10 +58,14 @@ public class RegistrationActivity extends AppCompatActivity {
     double longX = 0;
     double latX = 0;
 
+    Map<String, Object> user = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+
 
         //Get Firebase Instance
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -201,7 +206,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 //Add user information to Firestore
                                 userID = mFirebaseAuth.getCurrentUser().getUid();
                                 DocumentReference documentReference = fStore.collection("users").document(userID);
-                                Map<String, Object> user = new HashMap<>();
+                                //Map<String, Object> user = new HashMap<>();
                                 user.put("fName", firstX);
                                 user.put("lName", lastX);
                                 user.put("email", emailX);
@@ -215,11 +220,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
+
                                 final ProgressDialog pd = new ProgressDialog(RegistrationActivity.this);
                                 pd.setTitle("Uploading image...");
                                 pd.show();
 
                                 imageReference = storageReference.child("profilepics/" + userID);
+                                //user.put("imageUri", imageReference.getDownloadUrl());
 
                                 imageReference.putFile(imageUri)
                                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -227,6 +234,12 @@ public class RegistrationActivity extends AppCompatActivity {
                                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                                 pd.dismiss();
                                                 Snackbar.make(findViewById(android.R.id.content), "Image Uploaded", Snackbar.LENGTH_LONG).show();
+
+
+                                                //imageUrl = imageReference.getDownloadUrl().toString();
+
+                                                //Log.d("TestURL", imageReference.toString());
+                                                //Toast.makeText(RegistrationActivity.this, imageReference.getDownloadUrl().toString(), Toast.LENGTH_SHORT).show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -244,6 +257,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                             }
                                         });
+
 
 
                                 documentReference.set(user).addOnFailureListener(new OnFailureListener() {
