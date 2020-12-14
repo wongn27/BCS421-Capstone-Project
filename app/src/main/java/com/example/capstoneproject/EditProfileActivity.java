@@ -109,7 +109,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             addressET.setText(documentSnapshot.getString("address"));
                             phoneET.setText(documentSnapshot.getString("phone"));
                             bioET.setText(documentSnapshot.getString("bio"));
-                            sitter = documentSnapshot.getBoolean("isSitter");
+                            sitter = documentSnapshot.getBoolean("sitter");
                             if (sitter) {
                                 sitterSwitch.setChecked(true);
                             }
@@ -279,7 +279,7 @@ public class EditProfileActivity extends AppCompatActivity {
         user.put("address", address);
         user.put("phone", phone);
         user.put("bio", bio);
-        user.put("isSitter", sitter);
+        user.put("sitter", sitter);
 
         user.put("longitude", longX);
         user.put("latitude", latX);
