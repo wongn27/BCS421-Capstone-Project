@@ -62,6 +62,21 @@ public class EditPetProfileActivity extends AppCompatActivity {
         });
 
         setUpRecyclerView();
+
+        adapter.setOnItemClickListener(new PetAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Pet pet = documentSnapshot.toObject(Pet.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+                Toast.makeText(EditPetProfileActivity.this, "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+                Intent intent =  new Intent(EditPetProfileActivity.this, AddPetProfileActivity.class);
+                //intent.putExtra
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     private void setUpRecyclerView() {
