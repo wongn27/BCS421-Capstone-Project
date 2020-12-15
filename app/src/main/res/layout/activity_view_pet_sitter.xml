@@ -45,6 +45,12 @@
             android:layout_marginTop="15dp" />
 
         <TextView
+            android:id="@+id/milesAway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.2 mi"/>
+
+        <TextView
             android:id="@+id/myBio"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"

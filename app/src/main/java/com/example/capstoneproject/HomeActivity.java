@@ -52,6 +52,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Filter;
+import android.widget.Filterable;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -68,14 +71,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     PetSitterLoadListener petSitterLoadListener;
     String sitterId;
 
-    //private Geocoder geocoder;
+    private Geocoder geocoder;
 
     RecyclerView recyclerView;
+    SearchView searchView;
 
     Context context = this;
 
     List<PetSitter> list = new ArrayList<>();
 
+
+    PetSitterAdapter adapter;
     AdView mAdView;
 
     public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
@@ -125,6 +131,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         recyclerView = findViewById(R.id.recycler_view);
+        searchView = findViewById(R.id.searchView);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         initView();
         loadAllPetSitters();
@@ -169,7 +189,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onAllPetSitterLoadSuccess(List<PetSitter> petSitterList) {
-        PetSitterAdapter adapter = new PetSitterAdapter(petSitterList, this);
+        adapter = new PetSitterAdapter(petSitterList, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.VISIBLE);
     }

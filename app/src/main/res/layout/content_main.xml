@@ -12,9 +12,8 @@
     android:orientation="vertical"
     tools:context=".HomeActivity"
     tools:showIn="@layout/app_bar_main">
-
-
-    <com.google.android.gms.ads.AdView
+  
+  <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,17 +23,17 @@
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 
-
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:queryHint="Miles Away"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
-
-
-
 
 
 </LinearLayout>

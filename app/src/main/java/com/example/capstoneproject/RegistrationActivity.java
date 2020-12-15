@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -55,6 +56,8 @@ public class RegistrationActivity extends AppCompatActivity {
     String userID;
 
     private Geocoder geocoder;
+    GeoPoint geoPoint;
+
     double longX = 0;
     double latX = 0;
 
@@ -64,8 +67,6 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-
-
 
         //Get Firebase Instance
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -187,6 +188,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Address address = addresses.get(0);
                         longX = address.getLongitude();
                         latX = address.getLatitude();
+                        geoPoint = new GeoPoint(latX, longX);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -213,8 +215,9 @@ public class RegistrationActivity extends AppCompatActivity {
                                 user.put("address", addressX);
                                 user.put("phone", phoneX);
                                 user.put("bio", "");
-                                user.put("askingPrice", -1);
+                                user.put("askingPrice", 0);
                                 user.put("sitter", false);
+                                user.put("geoPoint", geoPoint);
                                 user.put("longitude", longX);
                                 user.put("latitude", latX);
 
