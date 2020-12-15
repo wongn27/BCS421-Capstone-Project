@@ -6,7 +6,7 @@
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    app:cardBackgroundColor="#FFFFE8">
+    app:cardBackgroundColor="@color/cardColor">
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:text="@string/pet_name"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewSex"
@@ -41,7 +41,7 @@
             android:layout_below="@id/textViewPetName"
             android:layout_weight="1"
             android:text="@string/sex"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewType"
@@ -52,7 +52,7 @@
             android:layout_below="@id/textViewSex"
             android:layout_weight="1"
             android:text="@string/type"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewAge"
@@ -63,7 +63,7 @@
             android:layout_below="@id/textViewType"
             android:layout_weight="1"
             android:text="@string/age"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewWeight"
@@ -74,7 +74,7 @@
             android:layout_below="@id/textViewAge"
             android:layout_weight="1"
             android:text="@string/weight"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewSpecialCareNeeds"
@@ -85,7 +85,7 @@
             android:layout_below="@id/textViewWeight"
             android:layout_weight="1"
             android:text="@string/special_care_needs"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

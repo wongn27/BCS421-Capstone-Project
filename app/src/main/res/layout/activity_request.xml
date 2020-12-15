@@ -13,54 +13,70 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
     <TextView
-        android:id="@+id/textViewDate"
+        android:id="@+id/textViewStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="Start Date"
         android:textSize="20sp" />
 
-    <ImageButton
-        android:id="@+id/buttonDatePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewDate"
-        android:layout_marginTop="84dp"
-        android:src="@drawable/ic_date_picker_foreground" />
+        <!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/text_input_start_date"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:errorEnabled="true">-->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_start_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true">
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Start Date"-->
+<!--            android:inputType="text"/>-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+        <ImageButton
+            android:id="@+id/buttonStartDatePicker"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_date_picker_foreground" />
+
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/text_input_end_date"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:errorEnabled="true">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="End Date"-->
+<!--            android:inputType="text"/>-->
+
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+        <TextView
+            android:id="@+id/textViewEndDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Start Date"
-            android:inputType="text"/>
+            android:text="End Date"
+            android:textSize="20sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_end_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="End Date"
-            android:inputType="text"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/buttonEndDatePicker"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_date_picker_foreground" />
 
         <Spinner
             android:id="@+id/spinner_pet_name"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown" />
 
@@ -73,16 +89,17 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Total Pay"
+            android:hint="@string/total_pay"
             android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonSubmit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/submit"
         android:onClick="onSubmitClick" />
 
     </LinearLayout>

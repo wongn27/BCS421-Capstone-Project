@@ -1,27 +1,37 @@
 package com.example.capstoneproject;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AddPetProfileActivity extends AppCompatActivity {
     private static final String TAG = "AddPetProfileActivity";
@@ -38,6 +48,11 @@ public class AddPetProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth;
 
+    private ImageView petProfilePicture;
+    public Uri imageUri;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+
     private TextInputLayout textInputName;
     private TextInputLayout textInputSex;
     private TextInputLayout textInputType;
@@ -52,6 +67,18 @@ public class AddPetProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_pet_profile);
 
+        petProfilePicture = findViewById(R.id.petProfilePicture);
+
+        petProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choosePicture();
+            }
+        });
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         textInputName = findViewById(R.id.text_input_name);
         textInputSex = findViewById(R.id.text_input_sex);
         textInputType = findViewById(R.id.text_input_type);
@@ -64,6 +91,57 @@ public class AddPetProfileActivity extends AppCompatActivity {
 
         buttonAddPet = findViewById(R.id.buttonAddPet);
         buttonAddPet.setOnClickListener(buttonAddPetClickListener);
+    }
+
+    private void choosePicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            petProfilePicture.setImageURI(imageUri);
+            uploadPicture();
+        }
+    }
+
+    private void uploadPicture() {
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading Image...");
+        progressDialog.show();
+
+        final String randomKey = UUID.randomUUID().toString();
+        StorageReference riversRef = storageReference.child("petProfilePictures/" + randomKey);
+
+        riversRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Snackbar.make(findViewById(android.R.id.content), "Image Uploaded", Snackbar.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        progressDialog.dismiss();
+                       Toast.makeText(getApplicationContext(), "Failed to upload", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercentage = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        progressDialog.setMessage("Progress: " + (int) progressPercentage + "%");
+                    }
+                });
     }
 
     private boolean validateFieldSpecialCareNeeds(TextInputLayout input, String regex, String errorNotValid) {
@@ -153,8 +231,7 @@ public class AddPetProfileActivity extends AppCompatActivity {
         if (text.matches("")) {
             checkForEmptyFields(input);
             return false;
-        }
-        else if (!text.matches(regex)) {
+        } else if (!text.matches(regex)) {
             input.setError(errorNotValid);
             return false;
         } else {

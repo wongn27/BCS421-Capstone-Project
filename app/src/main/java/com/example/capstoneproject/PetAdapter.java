@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class PetAdapter extends FirestoreRecyclerAdapter<Pet, PetAdapter.PetHolder> {
+    private OnItemClickListener listener;
 
     public PetAdapter(@NonNull FirestoreRecyclerOptions<Pet> options) {
         super(options);
@@ -50,6 +52,24 @@ public class PetAdapter extends FirestoreRecyclerAdapter<Pet, PetAdapter.PetHold
             textViewAge = itemView.findViewById(R.id.textViewAge);
             textViewWeight = itemView.findViewById(R.id.textViewWeight);
             textViewSpecialCareNeeds = itemView.findViewById(R.id.textViewSpecialCareNeeds);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                     int position = getAdapterPosition();
+                     if (position != RecyclerView.NO_POSITION && listener != null) {
+                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                     }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

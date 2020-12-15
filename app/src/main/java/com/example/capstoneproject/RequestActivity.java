@@ -1,11 +1,13 @@
 package com.example.capstoneproject;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -50,6 +52,11 @@ public class RequestActivity extends AppCompatActivity implements DatePickerDial
     private static final String TAG = "RequestActivity";
 
     private ImageButton buttonDatePicker;
+    private ImageButton buttonStartDatePicker;
+    private ImageButton buttonEndDatePicker;
+    DatePickerDialog datePickerDialog;
+    private TextView textViewEndDate;
+    private TextView textViewStartDate;
 
     private static final String KEY_START_DATE = "startDate";
     private static final String KEY_END_DATE = "endDate";
@@ -89,8 +96,8 @@ public class RequestActivity extends AppCompatActivity implements DatePickerDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
 
-        textInputStartDate = findViewById(R.id.text_input_start_date);
-        textInputEndDate = findViewById(R.id.text_input_end_date);
+        //textInputStartDate = findViewById(R.id.text_input_start_date);
+        //textInputEndDate = findViewById(R.id.text_input_end_date);
         textInputTotalPay = findViewById(R.id.text_input_total_pay);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -129,12 +136,47 @@ public class RequestActivity extends AppCompatActivity implements DatePickerDial
         buttonSubmit.setOnClickListener(buttonSubmitClickListener);
 
 
-        buttonDatePicker = findViewById(R.id.buttonDatePicker);
-        buttonDatePicker.setOnClickListener(new View.OnClickListener() {
+        //buttonDatePicker = findViewById(R.id.buttonDatePicker);
+        textViewStartDate = findViewById(R.id.textViewStartDate);
+        buttonStartDatePicker = findViewById(R.id.buttonStartDatePicker);
+        buttonStartDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
+
+        textViewEndDate = findViewById(R.id.textViewEndDate);
+
+        buttonEndDatePicker = findViewById(R.id.buttonEndDatePicker);
+        buttonEndDatePicker.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+//                DialogFragment datePicker = new DatePickerFragment();
+//                datePicker.show(getSupportFragmentManager(), "date picker");
+                Calendar calendar = Calendar.getInstance();
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+                datePickerDialog = new DatePickerDialog(RequestActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                       //textViewEndDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+
+                        //TextView textView = (TextView) findViewById(R.id.textViewDate);
+                        textViewEndDate = (TextView) findViewById(R.id.textViewEndDate);
+                        textViewEndDate.setText(currentDateString);
+                    }
+                },year,month,day);
+                datePickerDialog.show();
             }
         });
     }
@@ -148,8 +190,9 @@ public class RequestActivity extends AppCompatActivity implements DatePickerDial
 
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
 
-        TextView textView = (TextView) findViewById(R.id.textViewDate);
-        textView.setText(currentDateString);
+        //TextView textView = (TextView) findViewById(R.id.textViewDate);
+        textViewStartDate = (TextView) findViewById(R.id.textViewStartDate);
+        textViewStartDate.setText(currentDateString);
     }
 
     private void checkForEmptyFields(TextInputLayout input) {
@@ -164,19 +207,22 @@ public class RequestActivity extends AppCompatActivity implements DatePickerDial
     };
 
     public void onSubmitClick(View view) {
-        boolean isStartDateValid = validateField(textInputStartDate, "^\\d{2}-\\d{2}-\\d{4}$", "Start date is not valid. The format must be MM-DD-YYYY.");
-        boolean isEndDateValid = validateField(textInputEndDate, "^\\d{2}-\\d{2}-\\d{4}$", "End date is not valid. The format must be MM-DD-YYYY.");
+//        boolean isStartDateValid = validateField(textInputStartDate, "^\\d{2}-\\d{2}-\\d{4}$", "Start date is not valid. The format must be MM-DD-YYYY.");
+//        boolean isEndDateValid = validateField(textInputEndDate, "^\\d{2}-\\d{2}-\\d{4}$", "End date is not valid. The format must be MM-DD-YYYY.");
         boolean isTotalPayValid = validateField(textInputTotalPay, "^\\$(([1-9]\\d{0,2}(,\\d{3})*)|(([1-9]\\d*)?\\d))(\\.\\d\\d)?$", "Total Pay is not valid. " +
                 "Ex: $4,098.09 ; $4098.09 ; $0.35 ; $0 ; $380");
 
-        final String startDate = textInputStartDate.getEditText().getText().toString().trim();
-        final String endDate = textInputEndDate.getEditText().getText().toString().trim();
+//        final String startDate = textInputStartDate.getEditText().getText().toString().trim();
+//        final String endDate = textInputEndDate.getEditText().getText().toString().trim();
+        final String startDate = textViewStartDate.getText().toString();
+        final String endDate = textViewEndDate.getText().toString();
         final String totalPay = textInputTotalPay.getEditText().getText().toString().trim();
         String currentDate = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(new Date());
         final String userThatRequested = firebaseAuth.getCurrentUser().getUid();
 
 
-        if (isStartDateValid && isEndDateValid && isTotalPayValid) {
+        //if (isStartDateValid && isEndDateValid && isTotalPayValid) {
+        if (startDate != null && endDate != null && isTotalPayValid) {
             requestRef = db.collection("users").document(petSitterUserId).collection("requests")
                     .document(currentDate + " " + System.currentTimeMillis());
 
