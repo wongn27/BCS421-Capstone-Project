@@ -19,6 +19,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -58,6 +64,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef;
 
+    private PetSitterAdapter adapter;
     PetSitterLoadListener petSitterLoadListener;
     String sitterId;
 
@@ -69,12 +76,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     List<PetSitter> list = new ArrayList<>();
 
+    AdView mAdView;
+
     public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
+
+
+
+        Log.d(TESTLOG, "testing log");
+        Toast.makeText(this, "testing log", Toast.LENGTH_SHORT).show();
 
         usersRef = db.collection("users");
         petSitterLoadListener = this;
@@ -97,6 +122,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
         }
+
+        geocoder = new Geocoder(this);
+        setUpRecyclerView();
 
         recyclerView = findViewById(R.id.recycler_view);
 
@@ -237,9 +265,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(HomeActivity.this, ViewRequestsActivity.class));
                 return true;
             case R.id.nav_feedback:
-                //drawer.closeDrawer(GravityCompat.START);
-                //FirebaseAuth.getInstance().signOut();
-                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
+                drawer.closeDrawer(GravityCompat.START);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(HomeActivity.this, ViewPreviousSittersActivity.class));
                 return true;
             case R.id.nav_logout:
                 drawer.closeDrawer(GravityCompat.START);
