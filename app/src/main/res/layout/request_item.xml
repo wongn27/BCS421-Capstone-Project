@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="30dp">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -22,7 +22,8 @@
             android:layout_centerVertical="true"
             android:src="@drawable/pet_profile_picture"
             app:civ_border_width="2dp"
-            app:civ_border_color="@color/colorAccent"/>
+            app:civ_border_color="@color/colorAccent"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/fullName"
@@ -31,17 +32,20 @@
             android:text="Hilary Clinton"
             android:maxLines="1"
             android:ellipsize="end"
-            android:layout_centerHorizontal="true"
-            android:layout_alignTop="@+id/profilePic"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/requestOf"
+            android:layout_marginRight="5dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
         <TextView
+            android:id="@+id/requestOf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="request for"
+            android:text="@string/request_for"
             android:layout_centerHorizontal="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             />
 
         <TextView
@@ -49,14 +53,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fluffy"
-            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@+id/requestOf"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_alignBottom="@id/profilePic"
             />
 
 
 
 
     </RelativeLayout>
-
+[
 </androidx.cardview.widget.CardView>

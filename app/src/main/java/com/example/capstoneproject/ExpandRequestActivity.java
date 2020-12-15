@@ -80,7 +80,7 @@ public class ExpandRequestActivity extends AppCompatActivity {
                 petSex.setText(getResources().getString(R.string.sex) +": " +document.getString("sex"));
                 petName.setText(getResources().getString(R.string.take_care_of)+" " +document.getString("name"));
                 petInfo.setText("\n"+document.getString("specialCareNeeds"));
-                startDate.setText(startDateStr + " - ");
+                startDate.setText(startDateStr);
                 endDate.setText(endDateStr);
                 totalPay.setText(totalPayStr);
             }

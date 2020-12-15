@@ -3,6 +3,7 @@ package com.example.capstoneproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +19,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class GiveFeedbackActivity extends AppCompatActivity {
@@ -53,10 +57,13 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         userID = fAuth.getCurrentUser().getUid();
-        sitterID = "hi";
+
+        Intent intent = getIntent();
+        final String userThatAccepted = intent.getStringExtra(ViewPreviousSittersActivity.EXTRA_USERTHATACCEPTEDID);
 
         fStore  = FirebaseFirestore.getInstance();
-        reviewRef = fStore.collection("users").document(sitterID).collection("reviews").document(userID);
+        reviewRef = fStore.collection("users").document(userThatAccepted).collection("reviews")
+                .document(userID + " " + System.currentTimeMillis() + new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(new Date()));
 
         //submit the review when user clicks
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +80,6 @@ public class GiveFeedbackActivity extends AppCompatActivity {
                 newReview.put("review", review);
                 newReview.put("rating", rating);
                 newReview.put("userID", userID);
-                newReview.put("sitterID", sitterID);
 
                 //check to make sure values are valid
                 if (review != null && rating != 0) {
@@ -82,6 +88,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(GiveFeedbackActivity.this, "Review updated", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

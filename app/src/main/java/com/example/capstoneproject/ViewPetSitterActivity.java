@@ -92,7 +92,7 @@ public class ViewPetSitterActivity extends AppCompatActivity {
                 fullName.setText(document.getString("fName") +  " " + document.getString("lName"));
                 myBio.setText(document.getString("bio"));
                 askingPrice.setText("$"+String.valueOf(document.getDouble("askingPrice")));
-                milesAway.setText(format("%.0f",(location1.distanceTo(location2)*0.000621371)) + " mi");
+                milesAway.setText(format("%.0f",(location1.distanceTo(location2)*0.000621371)) + " miles away");
 
             }
         });
