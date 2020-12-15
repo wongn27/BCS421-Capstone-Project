@@ -214,7 +214,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 user.put("phone", phoneX);
                                 user.put("bio", "");
                                 user.put("askingPrice", -1);
-                                user.put("isSitter", false);
+                                user.put("sitter", false);
                                 user.put("longitude", longX);
                                 user.put("latitude", latX);
 

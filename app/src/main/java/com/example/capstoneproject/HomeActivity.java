@@ -14,6 +14,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -47,11 +53,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection("users");
 
-    Button requestBtn, reviewBtn;
-
     private PetSitterAdapter adapter;
 
     private Geocoder geocoder;
+
+    AdView mAdView;
 
     public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
 
@@ -60,11 +66,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
+
+
+
         Log.d(TESTLOG, "testing log");
         Toast.makeText(this, "testing log", Toast.LENGTH_SHORT).show();
-
-        requestBtn = findViewById(R.id.requestBtn);
-        reviewBtn = findViewById(R.id.reviewBtn);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,24 +102,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         geocoder = new Geocoder(this);
         setUpRecyclerView();
 
-
-        requestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, RequestActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        reviewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, GiveFeedbackActivity.class);
-
-                startActivity(intent);
-            }
-        });
     }
 
 
@@ -251,9 +248,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(HomeActivity.this, ViewRequestsActivity.class));
                 return true;
             case R.id.nav_feedback:
-                //drawer.closeDrawer(GravityCompat.START);
-                //FirebaseAuth.getInstance().signOut();
-                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
+                drawer.closeDrawer(GravityCompat.START);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(HomeActivity.this, ViewPreviousSittersActivity.class));
                 return true;
             case R.id.nav_logout:
                 drawer.closeDrawer(GravityCompat.START);
