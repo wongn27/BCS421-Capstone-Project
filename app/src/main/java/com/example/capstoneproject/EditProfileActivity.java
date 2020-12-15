@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -63,6 +64,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference imageReference;
 
     private Geocoder geocoder;
+    GeoPoint geoPoint;
     double longX = 0;
     double latX = 0;
 
@@ -84,8 +86,6 @@ public class EditProfileActivity extends AppCompatActivity {
         bioET = findViewById(R.id.bioEditText);
         updateButton = findViewById(R.id.updateButton);
         sitterSwitch = findViewById(R.id.sitterSwitch);
-
-
 
 
         //prepare firestore instance
@@ -183,10 +183,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        //hiiiiiii
     }
 
     //method to select image from gallery
@@ -264,7 +260,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Address theAddress = addresses.get(0);
             longX = theAddress.getLongitude();
             latX = theAddress.getLatitude();
-
+            geoPoint = new GeoPoint(latX, longX);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -280,7 +276,7 @@ public class EditProfileActivity extends AppCompatActivity {
         user.put("phone", phone);
         user.put("bio", bio);
         user.put("sitter", sitter);
-
+        user.put("geoPoint", geoPoint);
         user.put("longitude", longX);
         user.put("latitude", latX);
 
