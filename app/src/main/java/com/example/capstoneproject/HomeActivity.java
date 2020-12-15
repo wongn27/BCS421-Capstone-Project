@@ -80,8 +80,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     List<PetSitter> list = new ArrayList<>();
 
-
-    PetSitterAdapter adapter;
     AdView mAdView;
 
     public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
