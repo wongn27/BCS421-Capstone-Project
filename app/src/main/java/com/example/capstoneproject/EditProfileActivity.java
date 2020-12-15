@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -50,7 +52,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText firstNameET;
     private EditText lastNameET;
     private EditText emailET;
-    private EditText addressET, phoneET, bioET;
+    private EditText addressET, phoneET, bioET, askingPriceET;
+    private TextView askingPriceTV;
     private ImageView profilePic;
     private Button updateButton;
     private Switch sitterSwitch;
@@ -63,8 +66,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference imageReference;
 
     private Geocoder geocoder;
+    GeoPoint geoPoint;
     double longX = 0;
     double latX = 0;
+
+    //field variables
+    String firstName, lastName, email, address, bio, phone;
+    Long askingPrice;
 
 
 
@@ -84,8 +92,8 @@ public class EditProfileActivity extends AppCompatActivity {
         bioET = findViewById(R.id.bioEditText);
         updateButton = findViewById(R.id.updateButton);
         sitterSwitch = findViewById(R.id.sitterSwitch);
-
-
+        askingPriceET = findViewById(R.id.askingPriceEditText);
+        askingPriceTV = findViewById(R.id.askingPriceTextView);
 
 
         //prepare firestore instance
@@ -103,15 +111,29 @@ public class EditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            firstNameET.setText(documentSnapshot.getString("fName"));
-                            lastNameET.setText(documentSnapshot.getString("lName"));
-                            emailET.setText(documentSnapshot.getString("email"));
-                            addressET.setText(documentSnapshot.getString("address"));
-                            phoneET.setText(documentSnapshot.getString("phone"));
-                            bioET.setText(documentSnapshot.getString("bio"));
-                            sitter = documentSnapshot.getBoolean("isSitter");
+
+                            firstName = documentSnapshot.getString("fName");
+                            firstNameET.setText(firstName);
+                            lastName = documentSnapshot.getString("lName");
+                            lastNameET.setText(lastName);
+                            email = documentSnapshot.getString("email");
+                            emailET.setText(email);
+                            address = documentSnapshot.getString("address");
+                            addressET.setText(address);
+                            phone = documentSnapshot.getString("phone");
+                            phoneET.setText(phone);
+                            bio = documentSnapshot.getString("bio");
+                            bioET.setText(bio);
+                            askingPrice = documentSnapshot.getLong("askingPrice");
+                            sitter = documentSnapshot.getBoolean("sitter");
+                            askingPriceET.setText(askingPrice.toString());
+
                             if (sitter) {
                                 sitterSwitch.setChecked(true);
+                            }
+                            else {
+                                askingPriceET.setVisibility(View.GONE);
+                                askingPriceTV.setVisibility(View.GONE);
                             }
                             if (storage.getInstance().getReference().child("profilepics/" + userID) != null) {
                                 imageReference = storage.getInstance().getReference().child("profilepics/" + userID);
@@ -159,10 +181,14 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (sitterSwitch.isChecked()) {
+                    askingPriceET.setVisibility(View.VISIBLE);
+                    askingPriceTV.setVisibility(View.VISIBLE);
                     sitter = true;
                 }
                 else {
                     sitter = false;
+                    askingPriceET.setVisibility(View.GONE);
+                    askingPriceTV.setVisibility(View.GONE);
                 }
             }
         });
@@ -183,10 +209,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        //hiiiiiii
     }
 
     //method to select image from gallery
@@ -246,8 +268,6 @@ public class EditProfileActivity extends AppCompatActivity {
     public void updateUser() {
 
 
-        //field variables
-        String firstName, lastName, email, address, bio, phone;
         //get the current values
         firstName = firstNameET.getText().toString();
         lastName = lastNameET.getText().toString();
@@ -255,6 +275,7 @@ public class EditProfileActivity extends AppCompatActivity {
         address = addressET.getText().toString();
         phone = phoneET.getText().toString();
         bio = bioET.getText().toString();
+        askingPrice = Long.valueOf(askingPriceET.getText().toString());
 
 
         geocoder = new Geocoder(this);
@@ -264,7 +285,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Address theAddress = addresses.get(0);
             longX = theAddress.getLongitude();
             latX = theAddress.getLatitude();
-
+            geoPoint = new GeoPoint(latX, longX);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -279,8 +300,10 @@ public class EditProfileActivity extends AppCompatActivity {
         user.put("address", address);
         user.put("phone", phone);
         user.put("bio", bio);
-        user.put("isSitter", sitter);
+        user.put("sitter", sitter);
 
+        user.put("geoPoint", geoPoint);
+        user.put("askingPrice", askingPrice);
         user.put("longitude", longX);
         user.put("latitude", latX);
 

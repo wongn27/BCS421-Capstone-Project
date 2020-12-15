@@ -151,6 +151,26 @@
         android:inputType="textMultiLine"
         android:text="" />
 
+    <TextView
+        android:id="@+id/askingPriceTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="0"
+        android:text="@string/asking_price" />
+
+    <EditText
+        android:id="@+id/askingPriceEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="0"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="" />
+
     <Switch
         android:id="@+id/sitterSwitch"
         android:layout_width="match_parent"

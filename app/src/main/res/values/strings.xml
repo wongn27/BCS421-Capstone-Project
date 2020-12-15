@@ -52,5 +52,6 @@
     <string name="tell_us_about_your_experience">Tell us about your experience.</string>
     <string name="submit">Submit</string>
     <string name="total_pay">Total Pay</string>
+    <string name="asking_price">Asking price</string>
 
 </resources>

@@ -1,19 +1,33 @@
 package com.example.capstoneproject;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.TestLooperManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -26,6 +40,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,22 +52,37 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Filter;
+import android.widget.Filterable;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PetSitterLoadListener, PetSitterAdapter.OnPetSitterListener {
 
     private static final String TESTLOG = "TESTLOG";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection("users");
-
-    Button requestBtn, reviewBtn;
+    private CollectionReference usersRef;
 
     private PetSitterAdapter adapter;
+    PetSitterLoadListener petSitterLoadListener;
+    String sitterId;
 
     private Geocoder geocoder;
+
+    RecyclerView recyclerView;
+    SearchView searchView;
+
+    Context context = this;
+
+    List<PetSitter> list = new ArrayList<>();
+
+
+    PetSitterAdapter adapter;
+    AdView mAdView;
 
     public static final String EXTRA_PETSITTERID = "EXTRA_PETSITTERID";
 
@@ -60,11 +91,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
+
+
+
         Log.d(TESTLOG, "testing log");
         Toast.makeText(this, "testing log", Toast.LENGTH_SHORT).show();
 
-        requestBtn = findViewById(R.id.requestBtn);
-        reviewBtn = findViewById(R.id.reviewBtn);
+        usersRef = db.collection("users");
+        petSitterLoadListener = this;
+        context = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,97 +129,84 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setNavigationItemSelectedListener(this);
         }
 
-        geocoder = new Geocoder(this);
-        setUpRecyclerView();
 
+        recyclerView = findViewById(R.id.recycler_view);
+        searchView = findViewById(R.id.searchView);
 
-        requestBtn.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, RequestActivity.class);
-                startActivity(intent);
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
             }
         });
 
-
-        reviewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, GiveFeedbackActivity.class);
-
-                startActivity(intent);
-            }
-        });
+        initView();
+        loadAllPetSitters();
     }
 
 
-    private void setUpRecyclerView() {
-        Query query = usersRef.orderBy("email", Query.Direction.ASCENDING);
-
-        FirestoreRecyclerOptions<PetSitter> options = new FirestoreRecyclerOptions.Builder<PetSitter>()
-                .setQuery(query, PetSitter.class)
-                .build();
-
-        adapter = new PetSitterAdapter(options);
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+    private void initView(){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+    }
 
-        adapter.setOnItemClickListener(new PetSitterAdapter.OnItemClickListener() {
+
+    private void loadAllPetSitters(){
+        usersRef = db.collection("users");
+
+        usersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                String id = documentSnapshot.getId();
-                String path = documentSnapshot.getReference().getPath();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
 
-                Intent intent = new Intent(HomeActivity.this, ViewPetSitterActivity.class);
-                intent.putExtra(EXTRA_PETSITTERID, id);
-                startActivity(intent);
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult()){
+                        PetSitter petSitter = documentSnapshot.toObject(PetSitter.class);
+                        petSitter.setPetSitterId(documentSnapshot.getId());
+                        sitterId = petSitter.getPetSitterId();
+                        //filter by isPetSitter
+                        if(petSitter.isSitter() && !petSitter.getPetSitterId().equals(FirebaseAuth.getInstance().getUid())) {
+                            list.add(petSitter);
+                        }
+                    }
 
-                displayToast("Position: " + position + "\nDocID: " + id);
+                    petSitterLoadListener.onAllPetSitterLoadSuccess(list);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                petSitterLoadListener.onAllPetSitterLoadFailed(e.getMessage());
             }
         });
+    }
 
-        String location1Str = "78 Yankee St, Brentwood, NY 11717";
-        String location2Str = "2350 NY-110, Farmingdale, NY 11735";
 
-        try {
-            List<Address> addresses1 = geocoder.getFromLocationName(location1Str, 1);
-            Address address1 = addresses1.get(0);
-
-            List<Address> addresses2 = geocoder.getFromLocationName(location2Str, 1);
-            Address address2 = addresses2.get(0);
-
-            Location location1 = new Location("location1");
-            Location location2 = new Location("location2");
-
-            location1.setLatitude(address1.getLatitude());
-            location1.setLongitude(address1.getLongitude());
-
-            location2.setLatitude(address2.getLatitude());
-            location2.setLongitude(address2.getLongitude());
-
-            float distance = location1.distanceTo(location2);
-
-            Toast.makeText(this, distance * 0.000621371+"", Toast.LENGTH_SHORT).show();
-            Log.d("CHECKGEO2", "Total distance: " + distance * 0.000621371);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void onAllPetSitterLoadSuccess(List<PetSitter> petSitterList) {
+        adapter = new PetSitterAdapter(petSitterList, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
+    public void onAllPetSitterLoadFailed(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        //dialog.dismiss();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+    public void onPetSitterClick(int position) {
+        Intent intent = new Intent(HomeActivity.this, ViewPetSitterActivity.class);
+        intent.putExtra(EXTRA_PETSITTERID, list.get(position).getPetSitterId());
+        startActivity(intent);
     }
+
 
     /**
      * Handles the Back button: closes the nav drawer.
@@ -251,9 +283,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(HomeActivity.this, ViewRequestsActivity.class));
                 return true;
             case R.id.nav_feedback:
-                //drawer.closeDrawer(GravityCompat.START);
-                //FirebaseAuth.getInstance().signOut();
-                //startActivity(new Intent(HomeActivity.this, GiveFeedbackActivity.class));
+                drawer.closeDrawer(GravityCompat.START);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(HomeActivity.this, ViewPreviousSittersActivity.class));
                 return true;
             case R.id.nav_logout:
                 drawer.closeDrawer(GravityCompat.START);
@@ -274,5 +306,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
+
 
 }

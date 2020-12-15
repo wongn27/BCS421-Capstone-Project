@@ -57,7 +57,7 @@ public class ExpandRequestActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final String userThatRequested = intent.getStringExtra(ViewRequestsActivity.EXTRA_USERID);
-        String petNameStr = intent.getStringExtra(ViewRequestsActivity.EXTRA_PETNAME);
+        final String petNameStr = intent.getStringExtra(ViewRequestsActivity.EXTRA_PETNAME);
         final String startDateStr = intent.getStringExtra(ViewRequestsActivity.EXTRA_STARTDATE);
         final String endDateStr = intent.getStringExtra(ViewRequestsActivity.EXTRA_ENDDATE);
         final String totalPayStr = intent.getStringExtra(ViewRequestsActivity.EXTRA_TOTALPAY);
@@ -102,6 +102,10 @@ public class ExpandRequestActivity extends AppCompatActivity {
                 acceptedRequests.put("userThatAcceptedId", FirebaseAuth.getInstance().getUid());
                 acceptedRequests.put("fName", fName);
                 acceptedRequests.put("lName", lName);
+                acceptedRequests.put("startDate", startDateStr);
+                acceptedRequests.put("endDate", endDateStr);
+                acceptedRequests.put("totalPay", totalPayStr);
+                acceptedRequests.put("petName", petNameStr);
 
                 acceptedRequestsRef.set(acceptedRequests).addOnFailureListener(new OnFailureListener() {
                     @Override
