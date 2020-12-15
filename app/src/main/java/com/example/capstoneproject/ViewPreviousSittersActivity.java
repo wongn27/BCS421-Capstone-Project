@@ -32,10 +32,8 @@ public class ViewPreviousSittersActivity extends AppCompatActivity {
     public static String EXTRA_TOTALPAY = "EXTRA_TOTALPAY";
 
 
-    private FirebaseFirestore db;
-    private FirebaseAuth fAuth;
-    private String userID;
-    private CollectionReference previousSittersRef;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference previousSittersRef = db.collection("users").document(FirebaseAuth.getInstance().getUid()).collection("acceptedRequests");
 
     private PreviousSitterAdapter adapter;
 
@@ -44,13 +42,7 @@ public class ViewPreviousSittersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_previous_sitters);
 
-        db = FirebaseFirestore.getInstance();
-        fAuth = FirebaseAuth.getInstance();
-        userID = "RzxLuKXZBrZn43ifViPHIMz8FIl2";
-        previousSittersRef = db.collection("users").document(userID).collection("acceptedRequests");
-
         setUpRecyclerView();
-
 
     }
 

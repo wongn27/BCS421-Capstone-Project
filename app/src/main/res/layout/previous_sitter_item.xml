@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="8dp"
@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="25dp">
 
 
 
@@ -23,7 +23,9 @@
             android:layout_centerVertical="true"
             android:src="@drawable/pet_profile_picture"
             app:civ_border_width="2dp"
-            app:civ_border_color="@color/colorAccent"/>
+            app:civ_border_color="@color/colorAccent"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/fullName"
@@ -43,7 +45,8 @@
             android:layout_height="wrap_content"
             android:text="3.5"
             android:layout_toLeftOf="@+id/starIcon"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/starIcon"
@@ -52,7 +55,8 @@
             android:src="@drawable/ic_baseline_star_border_24"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            app:tint="@color/colorAccent"/>
+            app:tint="@color/colorAccent"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/milesAway"
@@ -63,7 +67,8 @@
             android:layout_alignBottom="@id/profilePic"
             android:text="4.2 mi"
             android:gravity="bottom"
-            android:layout_below="@+id/rating"/>
+            android:layout_below="@+id/rating"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

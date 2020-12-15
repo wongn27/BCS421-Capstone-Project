@@ -17,7 +17,7 @@
         android:id="@+id/textViewStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Date"
+        android:text="@string/start_date"
         android:textSize="20sp" />
 
         <!--    <com.google.android.material.textfield.TextInputLayout-->
@@ -38,9 +38,10 @@
             android:id="@+id/buttonStartDatePicker"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="right"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="1dp"
-            android:src="@drawable/ic_date_picker_foreground" />
+            android:src="@drawable/ic_date_picker_foreground"
+            />
 
 <!--        <com.google.android.material.textfield.TextInputLayout-->
 <!--        android:id="@+id/text_input_end_date"-->
@@ -60,14 +61,14 @@
             android:id="@+id/textViewEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="End Date"
+            android:text="@string/end_date"
             android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/buttonEndDatePicker"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="right"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="1dp"
             android:src="@drawable/ic_date_picker_foreground" />
 
