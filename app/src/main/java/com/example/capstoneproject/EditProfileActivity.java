@@ -306,7 +306,6 @@ public class EditProfileActivity extends AppCompatActivity {
         user.put("bio", bio);
         user.put("sitter", sitter);
         user.put("askingPrice", askingPrice);
-
         user.put("longitude", longX);
         user.put("latitude", latX);
 

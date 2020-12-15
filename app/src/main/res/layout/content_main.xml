@@ -13,6 +13,7 @@
     tools:context=".HomeActivity"
     tools:showIn="@layout/app_bar_main">
 
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
@@ -22,6 +23,7 @@
         android:layout_marginBottom="10dp"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
