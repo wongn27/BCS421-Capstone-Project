@@ -32,15 +32,22 @@ public class ViewPreviousSittersActivity extends AppCompatActivity {
     public static String EXTRA_TOTALPAY = "EXTRA_TOTALPAY";
 
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference requestsRef = db.collection("users").document(FirebaseAuth.getInstance().getUid()).collection("acceptedRequests");
+    private FirebaseFirestore db;
+    private FirebaseAuth fAuth;
+    private String userID;
+    private CollectionReference previousSittersRef;
 
-    private RequestAdapter adapter;
+    private PreviousSitterAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_previous_sitters);
+
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        userID = "RzxLuKXZBrZn43ifViPHIMz8FIl2";
+        previousSittersRef = db.collection("users").document(userID).collection("acceptedRequests");
 
         setUpRecyclerView();
 
@@ -48,26 +55,26 @@ public class ViewPreviousSittersActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        Query query = requestsRef.orderBy("startDate", Query.Direction.ASCENDING);
+        Query query = previousSittersRef.orderBy("startDate", Query.Direction.ASCENDING);
 
-        FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
-                .setQuery(query, Request.class)
+        FirestoreRecyclerOptions<Review> options = new FirestoreRecyclerOptions.Builder<Review>()
+                .setQuery(query, Review.class)
                 .build();
 
-        adapter = new RequestAdapter(options);
+        adapter = new PreviousSitterAdapter(options);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new RequestAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new PreviousSitterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 String id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
 
-                String petName = documentSnapshot.getString("nameOfPet");
+                String petName = documentSnapshot.getString("petName");
                 String startDate = documentSnapshot.getString("startDate");
                 String endDate = documentSnapshot.getString("endDate");
                 String totalPay = documentSnapshot.getString("totalPay");
@@ -75,8 +82,7 @@ public class ViewPreviousSittersActivity extends AppCompatActivity {
                 String lName = documentSnapshot.getString("lName");
                 String userThatAcceptedId = documentSnapshot.getString("userThatAcceptedId");
 
-                Intent intent = new Intent(ViewPreviousSittersActivity.this, ExpandRequestActivity.class);
-                //intent.putExtra(EXTRA_USERID, id);
+                Intent intent = new Intent(ViewPreviousSittersActivity.this, GiveFeedbackActivity.class);
                 intent.putExtra(EXTRA_USERTHATACCEPTEDID, userThatAcceptedId);
                 intent.putExtra(EXTRA_FNAME, fName);
                 intent.putExtra(EXTRA_LNAME, lName);
