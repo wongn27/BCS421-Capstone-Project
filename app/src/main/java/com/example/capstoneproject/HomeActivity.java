@@ -123,8 +123,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setNavigationItemSelectedListener(this);
         }
 
-        geocoder = new Geocoder(this);
-        setUpRecyclerView();
 
         recyclerView = findViewById(R.id.recycler_view);
 
